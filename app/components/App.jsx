@@ -29,7 +29,7 @@ class App extends React.Component {
     render() {
         const notes = this.state.notes;
         return (<div>
-            <button onClick={this.addNote}>+</button>
+            <button className="add-note" onClick={this.addNote}>+</button>
             <Notes
                 notes={notes}
                 onEdit={this.editNote}
