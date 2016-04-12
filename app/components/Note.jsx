@@ -6,6 +6,10 @@ import ItemTypes from '../constants/itemType';
 const noteSource = {
     beginDrag(props) {
         return {id: props.id};
+    },
+
+    isDragging(props, monitor) {
+        return props.id === monitor.getItem().id
     }
 };
 
@@ -21,8 +25,9 @@ const noteTarget = {
     }
 };
 
-@DragSource(ItemTypes.NOTE, noteSource, (connect) => ({
-    connectDragSource: connect.dragSource()
+@DragSource(ItemTypes.NOTE, noteSource, (connect, monitor) => ({
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging()
 }))
 
 @DropTarget(ItemTypes.NOTE, noteTarget, (connect) => ({
@@ -40,7 +45,7 @@ export default class Note extends React.Component {
 
     render() {
 
-        const {connectDragSource, connectDropTarget, id, onMove, ...props} = this.props;
+        const {connectDragSource, connectDropTarget, isDragging, onMove, id , ...props} = this.props;
         // if (this.state.editing) {
         //     return this.renderEdit();
         // }
@@ -48,7 +53,7 @@ export default class Note extends React.Component {
         // return this.renderNote();
 
         return connectDragSource( connectDropTarget(
-            <li {...this.props}>{this.props.children}</li>
+            <li style={{opacity: isDragging?0 :1}} {...this.props}>{this.props.children}</li>
         ));
     }
 
