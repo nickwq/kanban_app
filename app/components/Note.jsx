@@ -45,15 +45,18 @@ export default class Note extends React.Component {
 
     render() {
 
-        const {connectDragSource, connectDropTarget, isDragging, onMove, id , ...props} = this.props;
+        const {connectDragSource, connectDropTarget, isDragging,
+            onMove, id, editing, ...props} = this.props;
+        const dragSource = editing ? a => a : connectDragSource;
         // if (this.state.editing) {
         //     return this.renderEdit();
         // }
         //
         // return this.renderNote();
 
-        return connectDragSource( connectDropTarget(
-            <li style={{opacity: isDragging?0 :1}} {...this.props}>{this.props.children}</li>
+        return dragSource( connectDropTarget(
+            <li style={{opacity: isDragging?0 :1}}
+                {...this.props}>{this.props.children}</li>
         ));
     }
 
