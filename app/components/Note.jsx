@@ -25,6 +25,7 @@ const noteTarget = {
     }
 };
 
+
 @DragSource(ItemTypes.NOTE, noteSource, (connect, monitor) => ({
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging()
