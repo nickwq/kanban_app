@@ -14,6 +14,7 @@ const pkg = require('./package.json');
 process.env.BABEL_ENV = TARGET;
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CleanPlugin = require('clean-webpack-plugin');
 
 const common = {
     entry: {
@@ -84,6 +85,7 @@ if(TARGET === 'build'){
             chunkFilename: '[chunkhash].js'
         },
         plugins: [
+            new CleanPlugin([PATHS.build]),
             new webpack.optimize.CommonsChunkPlugin({
                 names: ['vendor', 'manifest']
             }),
