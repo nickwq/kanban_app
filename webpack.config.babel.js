@@ -13,6 +13,8 @@ const pkg = require('./package.json');
 
 process.env.BABEL_ENV = TARGET;
 
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
 const common = {
     entry: {
         app: PATHS.app
@@ -36,7 +38,15 @@ const common = {
                 include: PATHS.app
             }
         ]
-    }
+    },
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: 'node_modules/html-webpack-template/index.ejs',
+            title: 'Kanban app',
+            appMountId:'app',
+            inject: false
+        })
+    ]
 };
 
 //default config
@@ -44,7 +54,6 @@ if(TARGET === 'start' || !TARGET){
     module.exports = merge(common, {
         devtool: 'eval-source-map',
         devServer: {
-            contentBase: PATHS.build,
             historyApiFallback: true,
             hot: true,
             inline: true,
@@ -69,7 +78,15 @@ if(TARGET === 'build'){
                 return v !== 'alt-utils';
             })
         },
+        output: {
+            path: PATHS.build,
+            filename: '[name].[chunkhash].js',
+            chunkFilename: '[chunkhash].js'
+        },
         plugins: [
+            new webpack.optimize.CommonsChunkPlugin({
+                names: ['vendor', 'manifest']
+            }),
             new webpack.DefinePlugin({
                 'process.env.NODE_ENV': '"production"'
             }),
