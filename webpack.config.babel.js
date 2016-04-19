@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const merge =  require('webpack-merge');
 const NpmInstallPlugin = require('npm-install-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const TARGET = process.env.npm_lifecycle_event;
 
 const PATHS = {
@@ -29,11 +30,7 @@ const common = {
     },
     module: {
         loaders: [
-            {
-                test: /\.css$/,
-                loaders: ['style', 'css'],
-                include: PATHS.app
-            }, {
+           {
                 test: [/\.js$/, /\.jsx$/],
                 loaders: ['babel?cacheDirectory'],
                 include: PATHS.app
@@ -63,6 +60,16 @@ if(TARGET === 'start' || !TARGET){
             host: process.env.HOST,
             port: process.env.PORT
         },
+        module: {
+            loaders: [
+                // Define development specific CSS setup
+                {
+                    test: /\.css$/,
+                    loaders: ['style', 'css'],
+                    include: PATHS.app
+                }
+            ]
+        },
         plugins: [
             new webpack.HotModuleReplacementPlugin(),
             new NpmInstallPlugin({
@@ -84,8 +91,20 @@ if(TARGET === 'build'){
             filename: '[name].[chunkhash].js',
             chunkFilename: '[chunkhash].js'
         },
+        module: {
+            loaders: [
+                {
+                    test: /\.css$/,
+                    loader: ExtractTextPlugin.extract('style', 'css'),
+                    include: PATHS.app
+                }
+            ]
+        },
         plugins: [
-            new CleanPlugin([PATHS.build]),
+            new CleanPlugin([PATHS.build], {
+                verbose: false // Don't write logs to console
+            }),
+            new ExtractTextPlugin('[name].[chunkhash].css'),
             new webpack.optimize.CommonsChunkPlugin({
                 names: ['vendor', 'manifest']
             }),
