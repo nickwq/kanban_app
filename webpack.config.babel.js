@@ -7,7 +7,8 @@ const TARGET = process.env.npm_lifecycle_event;
 
 const PATHS = {
     app: path.join(__dirname, 'app'),
-    build: path.join(__dirname, 'build')
+    build: path.join(__dirname, 'build'),
+    style: path.join(__dirname, 'app/main.css')
 };
 
 const pkg = require('./package.json');
@@ -19,7 +20,8 @@ const CleanPlugin = require('clean-webpack-plugin');
 
 const common = {
     entry: {
-        app: PATHS.app
+        app: PATHS.app,
+        style: PATHS.style
     },
     resolve: {
         extensions: ['', '.js', '.jsx']
@@ -79,7 +81,7 @@ if(TARGET === 'start' || !TARGET){
     });
 }
 
-if(TARGET === 'build'){
+if(TARGET === 'build' || TARGET=== 'stats'){
     module.exports = merge(common, {
         entry: {
             vendor: Object.keys(pkg.dependencies).filter(function (v) {

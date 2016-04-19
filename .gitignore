@@ -4,3 +4,4 @@ build/
 build/app.*.js
 build/vendor.*.js
 build/bundle.*.js
+stats.json

@@ -1,5 +1,3 @@
-import './main.css';
-
 import App from './components/App.jsx';
 import alt from './libs/alt';
 import storage from './libs/storage';
